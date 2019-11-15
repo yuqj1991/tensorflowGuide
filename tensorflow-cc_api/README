@@ -1,0 +1,53 @@
+A class to load tf models and do predict by Makefile
+
+Step 1:
+  put tensorflow head files into as include;
+  (in this repo, include is a softlink to my local machine's folder);
+  < you may need download what I've uploaded and copy that folder here, link see below >;
+  put libtensorflow_cc.so and libcudnn.so into ./lib (the same as include);
+  if you prefer to use your own, follow tensorflow home page or find other ways...
+  my includes and lib(tf api r1.2, built with bazel) now uploaded at 
+  ' https://drive.google.com/open?id=0B9BHx-TgQtxjcXhEQU5YazVnbWM ' 
+  also can download and tar it
+
+Step 2:
+  put category.txt and model.pb in ./resource;
+  < my category is in this repo, while the pb file is 
+  tensorflow/models/object_detection/ \
+  faster_rcnn_resnet101_coco_11_06_2017/frozen_inference_graph.pb >
+  modify the operation name in TensorflowLoader::doPredict() to sess->Run(op);
+  ./build.sh
+  # This may clean up and build:
+    *.o in ./obj
+    gen in ./bin
+    head file and library in ./submit
+
+Step 3:
+  ./run.sh
+
+-------------------------------
+Errors may occur, mainly because of the -I or -L and -l not included...
+
+
+------------------------------- Intro
+TensorflowLoader is such a class that does:
+1. loadModel() and loadLabel() allow to load model via each file name.
+2. feedPath() allow to obtain image from a file path.
+3. feedRawData() allow to get data from a camera RGB data.
+4. readOperationName() to get operations in defined in pb file, so that we can execute other words, sess->Run() for this operation.
+5. doPredict() returns the prediction containing the info of coordinate and confidence and its category.
+......
+
+laMiaSocket is such a class that does:
+1. select whether client or server
+2. send message between client and server
+......
+
+-------------------------------- 
+updating README is so easy to forget....
+
+--------------------------------
+tensorflow_yolo is on the way...
+
+--------------------------------
+wanna support load model.ckpt, to be continued
